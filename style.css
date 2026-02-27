@@ -886,4 +886,9 @@ body {
         text-align: center; /* Centraliza o texto no mobile */
     }
 }
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 
