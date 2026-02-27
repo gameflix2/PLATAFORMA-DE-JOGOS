@@ -824,3 +824,23 @@ body {
 
 /* Classe para esconder a tela após login */
 #login-screen.hidden { display: none; }
+
+/* Ajuste da Logo do Banner */
+#banner-logo {
+    width: 100%;
+    max-width: 300px; /* Define o tamanho máximo da logo */
+    height: auto;
+    margin-bottom: 15px;
+    display: block;
+    /* Esse filtro faz a logo "saltar" do vídeo, dando profundidade */
+    filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.9)); 
+}
+
+/* Ajuste para telas menores (Celular) */
+@media (max-width: 768px) {
+    #banner-logo {
+        max-width: 280px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
