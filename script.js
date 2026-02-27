@@ -98,34 +98,32 @@ document.getElementById("netflixModal").addEventListener("click", e => {
 
 document.querySelectorAll('.free-game-trigger').forEach(card => {
   card.addEventListener('click', function() {
-    // 1. Coleta os dados do card clicado (incluindo a nova data-logo)
+    // 1. Coleta os dados novos
     const novaLogo = this.getAttribute('data-logo');
     const novaDesc = this.getAttribute('data-desc');
     const novoVideo = this.getAttribute('data-video');
     const novoLink = this.getAttribute('data-link');
 
-    // 2. Atualiza os elementos do banner
-    // Aqui trocamos o texto pela imagem da logo
-    const bannerLogo = document.getElementById('banner-logo');
-    if (bannerLogo) {
-        bannerLogo.src = novaLogo;
+    // 2. Atualiza a LOGO e a DESCRIÇÃO
+    const imgLogo = document.getElementById('banner-logo');
+    if (imgLogo) {
+      imgLogo.src = novaLogo;
     }
-
     document.getElementById('banner-desc').textContent = novaDesc;
     
-    // Atualiza e dá play no vídeo
+    // 3. Atualiza o VÍDEO
     const videoElement = document.getElementById('banner-video');
     videoElement.src = novoVideo;
-    videoElement.load(); // Garante que o navegador carregue o novo arquivo
+    videoElement.load(); // Força o carregamento do novo vídeo
     videoElement.play();
 
-    // Atualiza o link do botão de download
+    // 4. Atualiza o Botão de Download
     const downloadBtn = document.querySelector('.banner-content a');
     if (downloadBtn) {
-        downloadBtn.href = novoLink;
+      downloadBtn.href = novoLink;
     }
 
-    // 3. Sobe a página suavemente para o topo para o usuário ver a mudança
+    // 5. Sobe para o topo
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 });
@@ -155,3 +153,4 @@ loginForm.addEventListener('submit', function(e) {
     alert("Email ou senha incorretos. Tente novamente.");
   }
 });
+
