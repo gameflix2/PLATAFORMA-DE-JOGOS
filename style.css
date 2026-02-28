@@ -8,8 +8,7 @@ body {
   margin: 0;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   background-color: #000000;
-  color: #fff;MADIA
-
+  color: #fff;
   
   overflow-x: hidden;
 }
@@ -155,8 +154,6 @@ body {
   cursor: pointer;
 }
 
-
-
 .row h2 {
   font-size: 1.4vw;
   color: #e5e5e5;
@@ -247,14 +244,6 @@ body {
 
 .arrow-left { left: 5px; }
 .arrow-right { right: 5px; }
-
-@media(max-width:768px){
-  .banner-content h1 { font-size: 2rem; }
-  .banner-content p { font-size: 14px; }
-  .poster-img { width: 100px; height: 150px; margin-left: 50px; }
-  .rank-number { font-size: clamp(60px, 25vw, 120px); left: -10px; bottom: -15px; }
-  .arrow-left, .arrow-right { width: 30px; height: 50px; font-size: 1.5rem; }
-}
 
 /* ROW normal jogos */
 .games-scroll {
@@ -372,6 +361,7 @@ body {
     black 100%
   );
 }
+
 /* ===== MODAL NETFLIX STYLE ===== */
 .netflix-modal {
   position: fixed;
@@ -434,82 +424,6 @@ body {
   z-index: 10;
 }
 
-/* --- AJUSTE MOBILE REFINADO V3 - O ARSENAL DE GAMES --- */
-@media (max-width: 768px) {
-
-  /* 1. Ajuste do Banner Principal e Topo do Site */
-  .pinning-header { height: 60px; }
-  
-  /* Sobe o conteúdo inicial para evitar buracos no topo */
-  .banner { 
-    height: 35vh !important; 
-    margin-top: 0;
-  }
-
-  /* 2. Banner Black Friday com respiro agradável embaixo */
-  .top10-banner {
-    margin-bottom: 15px !important; /* Os 10% de espaço que você pediu */
-    margin-top: 10px;
-  }
-
-  /* 3. Títulos colados nos cards abaixo (Harmonizando o buraco) */
-  .row {
-    margin-top: 0px !important;
-    padding-top: 0px !important;
-  }
-
-  .row h2 {
-    font-size: 1.1rem !important;
-    margin-bottom: 20px !important; /* Cola o título no card */
-    margin-top: 0px !important;
-    padding-left: 15px;
-  }
-
-  /* 4. Números e Cards do Top 10 (Ajuste de invasão) */
-  .card-container {
-    position: relative;
-    min-width: 32% !important;
-    margin-right: 18px !important; /* Aumentei um pouco para o número não bater no vizinho */
-  }
-
-  .rank-number {
-    font-size: 85px !important;
-    position: absolute !important;
-    bottom: -15px !important;
-    left: -15px !important;
-    z-index: 1 !important;
-    color: #141414 !important;
-    -webkit-text-stroke: 1.5px #888 !important;
-    letter-spacing: -8px;
-  }
-
-  .poster-img {
-    z-index: 2 !important;
-    position: relative;
-    width: 100% !important;
-    height: 155px !important;
-    object-fit: cover;
-  }
-
-  /* 5. Combo Centralizado e Vertical */
-  .games-scroll {
-    display: flex !important;
-    gap: 10px !important;
-    padding: 5px 15px 20px 15px !important; /* Respiro embaixo para o botão comprar */
-  }
-
-  .game-card {
-    min-width: 31% !important;
-    height: 160px !important;
-    object-fit: cover !important;
-    flex-shrink: 0;
-  }
-
-  /* Esconde barras de rolagem */
-  .games-scroll::-webkit-scrollbar, .top-10-scroll::-webkit-scrollbar {
-    display: none;
-  }
-}
 /* Definição da Animação */
 @keyframes subirSuave {
   from {
@@ -550,6 +464,7 @@ body {
   animation: subirSuave 0.8s ease-out 0.6s forwards;
   opacity: 0;
 }
+
 /* ===== ESTILOS DA TELA DE SPLASH GAMEFLIX ===== */
 #splash-screen {
   position: fixed;
@@ -659,11 +574,6 @@ body {
   pointer-events: none; /* Garante que o usuário possa clicar no site */
 }
 
-/* Ajuste Responsivo para Mobile */
-@media (max-width: 768px) {
-  .splash-text { font-size: 2.5rem; }
-}
-
 .search-box {
     display: flex;
     align-items: center;
@@ -671,7 +581,7 @@ body {
     border: 1px solid #444;
     padding: 5px 10px;
     border-radius: 4px;
-~  transition: all 0.3s;
+    transition: all 0.3s;
 }
 
 .search-box input {
@@ -697,6 +607,7 @@ body {
     cursor: pointer;
     font-size: 18px;
 }
+
 /* --- RODAPÉ ESTILO NETFLIX REAL --- */
 .footer {
   background-color: #000;
@@ -754,12 +665,6 @@ body {
   font-size: 11px;
 }
 
-/* Ajuste para celular */
-@media (max-width: 768px) {
-  .footer-links {
-    grid-template-columns: repeat(2, 1fr); /* 2 colunas no mobile */
-  }
-}
 /* --- ESTILO DA TELA DE LOGIN --- */
 #login-screen {
   position: fixed;
@@ -851,24 +756,6 @@ body {
 /* Ajuste da Logo do Banner */
 #banner-logo {
     width: 100%;
-    max-width: 300px; /* Define o tamanho máximo da logo */
-    height: auto;
-    margin-bottom: 15px;
-    display: block;
-    /* Esse filtro faz a logo "saltar" do vídeo, dando profundidade */
-    filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.9)); 
-}
-
-/* Ajuste para telas menores (Celular) */
-@media (max-width: 768px) {
-    #banner-logo {
-        max-width: 280px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-}
-#banner-logo {
-    width: 100%;
     max-width: 350px; /* Tamanho ideal para desktop */
     height: auto;
     margin-bottom: 10px;
@@ -876,19 +763,114 @@ body {
     filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.8)); /* Faz a logo se destacar do vídeo */
 }
 
-/* Para ficar bonito no celular */
-@media (max-width: 768px) {
-    #banner-logo {
-        max-width: 220px;
-        margin: 0 auto 15px auto; /* Centraliza no mobile */
-    }
-    .banner-content {
-        text-align: center; /* Centraliza o texto no mobile */
-    }
-}
 html, body {
     max-width: 100%;
     overflow-x: hidden;
 }
 
+/* ============================================================
+   AJUSTE MOBILE UNIFICADO - GAMEFLIX (NÃO AFETA O PC)
+   ============================================================ */
+@media (max-width: 768px) {
 
+  /* 1. Ajustes de Topo e Banner */
+  .pinning-header { height: 60px; }
+  
+  .banner { 
+    height: 45vh !important; 
+    margin-top: 0;
+    padding-bottom: 80px !important;
+  }
+
+  .banner-content {
+    text-align: center;
+    max-width: 100%;
+  }
+
+  #banner-logo {
+    max-width: 220px !important;
+    margin: 0 auto 15px auto !important;
+  }
+
+  .banner-content h1 { font-size: 1.8rem !important; }
+  .banner-content p { font-size: 14px !important; }
+
+  .btn-play, .btn-info {
+    font-size: 14px !important;
+    padding: 10px 15px !important;
+    width: 90%;
+    margin: 5px auto !important;
+    display: block !important;
+  }
+
+  /* 2. Navegação e Busca */
+  .nav-links { display: none !important; } /* Esconde categorias que não cabem */
+  
+  .header-actions { gap: 8px; }
+  .search-box input:focus, .search-box:hover input { width: 120px; }
+
+  /* 3. Ajuste das Fileiras de Jogos (Rows) */
+  .row {
+    margin-top: 20px !important;
+    padding: 0 15px;
+  }
+
+  .row h2 {
+    font-size: 1.1rem !important;
+    margin-bottom: 15px !important;
+  }
+
+  .games-scroll {
+    display: flex !important;
+    flex-wrap: nowrap !important; /* Permite deslizar para o lado como na Netflix */
+    overflow-x: auto !important;
+    gap: 10px !important;
+    padding-bottom: 15px;
+  }
+
+  .game-card {
+    min-width: 130px !important;
+    height: 190px !important;
+    flex-shrink: 0;
+    width: auto !important; /* Sobrescreve o cálculo de 9 colunas do PC */
+  }
+
+  /* 4. Números e Cards do Top 10 */
+  .top10-banner {
+    margin-bottom: 20px !important;
+    margin-top: 10px;
+  }
+
+  .card-container {
+    min-width: 160px !important;
+    margin-right: 25px !important;
+  }
+
+  .rank-number {
+    font-size: 100px !important;
+    bottom: -15px !important;
+    left: -10px !important;
+    -webkit-text-stroke: 2px #6a6a6a !important;
+    letter-spacing: -5px;
+  }
+
+  .poster-img {
+    width: 110px !important;
+    height: 160px !important;
+    margin-left: 55px !important;
+  }
+
+  /* 5. Splash Screen e Modal */
+  .splash-text { font-size: 2.5rem !important; }
+  
+  .modal-content { width: 95%; }
+  .modal-video { height: 250px; }
+
+  /* 6. Rodapé e Botões */
+  .footer-links { grid-template-columns: repeat(2, 1fr); }
+  
+  .netflix-btn {
+    padding: 15px 30px;
+    font-size: 18px;
+  }
+}
