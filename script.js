@@ -137,8 +137,8 @@ loginForm.addEventListener('submit', function(e) {
   const passwordInput = document.getElementById('user-password').value;
 
   // DEFINA AQUI O EMAIL E SENHA QUE VOCÊ QUER
-  const emailCorreto = "testegratis@gameflix.com";
-  const senhaCorreta = "testegratisgameflix";
+  const emailCorreto = "t@gameflix.com";
+  const senhaCorreta = "g";
 
   if (emailInput === emailCorreto && passwordInput === senhaCorreta) {
     // Esconde a tela de login
@@ -153,5 +153,4 @@ loginForm.addEventListener('submit', function(e) {
     alert("Email ou senha incorretos. Tente novamente.");
   }
 });
-
 
