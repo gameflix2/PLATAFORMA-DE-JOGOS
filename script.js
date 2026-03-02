@@ -1,4 +1,4 @@
- --- SCROLL INTELIGENTE DO TOP 10 --- */
+/* --- SCROLL INTELIGENTE DO TOP 10 --- */
 const top10 = document.getElementById('top10');
 
 function scrollLeft(){
