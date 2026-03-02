@@ -1,407 +1,156 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inicio - Gameflix</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+ --- SCROLL INTELIGENTE DO TOP 10 --- */
+const top10 = document.getElementById('top10');
 
-<div id="login-screen">
-  <div class="login-header">
-    <a href="#" class="logo">GAMEFLIX</a>
-  </div>
+function scrollLeft(){
+  if(!top10) return;
+  const card = top10.querySelector(".card-container");
+  if(!card) return;
+  top10.scrollBy({ left: -(card.offsetWidth + 45) * 2, behavior: "smooth" });
+}
+
+function scrollRight(){
+  if(!top10) return;
+  const card = top10.querySelector(".card-container");
+  if(!card) return;
+  top10.scrollBy({ left: (card.offsetWidth + 45) * 2, behavior: "smooth" });
+}
+
+/* --- EFEITO DO HEADER NO SCROLL --- */
+window.addEventListener('scroll', ()=>{
+  const header = document.getElementById('header');
+  if(window.scrollY > 50) {
+    header.style.background = 'rgba(20,20,20,0.95)';
+  } else {
+    header.style.background = 'linear-gradient(to bottom, rgba(0,0,0,0.7) 10%, transparent)';
+  }
+});
+
+/* --- CONTROLE DO VÍDEO DO BANNER (LOOP INTELIGENTE) --- */
+window.addEventListener("DOMContentLoaded", ()=>{
+  const bannerSection = document.getElementById("main-banner");
+  const bannerVideo = document.getElementById("banner-video");
+  if(!bannerVideo || !bannerSection) return;
+
+  // 1. Removemos o loop padrão do HTML para o JavaScript assumir o controle
+  bannerVideo.removeAttribute("loop");
+
+  // 2. Quando o vídeo terminar, ele muta o som e começa de novo!
+  bannerVideo.addEventListener("ended", () => {
+    bannerVideo.muted = true; // Fica mudo
+    bannerVideo.play().catch(()=>{}); // Recomeça o vídeo
+  });
+
+  // 3. Clique no banner para ligar/desligar o som manualmente, se o usuário quiser
+  bannerSection.addEventListener("click", ()=>{
+    if(bannerVideo.muted){
+      bannerVideo.muted = false;
+      bannerVideo.volume = 0.3; // Volume agradável
+    } else {
+      bannerVideo.muted = true;
+    }
+  });
+});
+
+/* --- LÓGICA DO MODAL (ESTILO NETFLIX COM YOUTUBE) --- */
+function openModal(title, desc, youtubeId) {
+  const modal = document.getElementById("netflixModal");
+  const iframe = document.getElementById("modalVideo");
+  const bannerVideo = document.getElementById("banner-video");
+
+  // PAUSA E MUTA O VÍDEO DE FUNDO À FORÇA!
+  if(bannerVideo) {
+    bannerVideo.pause();
+    bannerVideo.muted = true; 
+  }
+
+  document.getElementById("modalTitle").textContent = title;
+  document.getElementById("modalDesc").textContent = desc;
+
+  // MÁGICA AQUI: adicionei &start=10 no final do link!
+  iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&playsinline=1&start=10`;
   
-  <div class="login-box">
-    <h1>Entrar</h1>
-    <form id="login-form">
-      <div class="input-group">
-        <input type="email" id="user-email" required placeholder="Email">
-      </div>
-      <div class="input-group">
-        <input type="password" id="user-password" required placeholder="Senha">
-      </div>
-      <button type="submit" class="btn-login-submit">Entrar</button>
-      
-      <div class="login-help">
-        <div class="remember-me">
-          <input type="checkbox" id="remember">
-          <label for="remember">Lembre-se de mim</label>
-        </div>
-        <a href="#">Precisa de ajuda?</a>
-      </div>
-    </form>
+  modal.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
 
-    <div class="login-footer-info">
-      <p>Novo por aqui? <a href="#">Assine agora.</a></p>
-      <p class="captcha-text">
-        Esta página é protegida pelo Google reCAPTCHA.
-      </p>
-    </div>
-  </div>
-</div>
+function closeModal(){
+  const modal = document.getElementById("netflixModal");
+  const iframe = document.getElementById("modalVideo");
+  const bannerVideo = document.getElementById("banner-video");
 
-  <header class="pinning-header" id="header">
-    <div class="main-header"> 
-      <a href="#" class="logo">GAMEFLIX</a>
-      <ul class="nav-links">
-        <li><a href="#">Início</a></li>
-        <li><a href="#">FPS</a></li>
-        <li><a href="#">RPG</a></li>
-        <li><a href="#">CORRIDA</a></li>
-        <li><a href="#">MEUS JOGOS</a></li>
-      </ul>
-      <div class="header-actions">
-        <div class="search-box">
-          <input type="text" id="game-search" placeholder="Buscar no Premium...">
-          <button style="background:transparent; border:none; color:white; cursor:pointer;">🔍</button>
-        </div>
-        <button style="font-size: 20px; background:transparent; border:none; color:white;">🔔</button>
-        <img class="profile" src="https://shopinfo.vteximg.com.br/arquivos/ids/1722843-1000-1000/1.png?v=638999311948470000" alt="Perfil">
-      </div>
-    </div>
-  </header>
+  // Remove o vídeo do YouTube para ele parar de tocar
+  iframe.src = "";
 
-  <section class="banner" id="main-banner">
-    <video class="banner-video" autoplay muted loop playsinline id="banner-video">
-      <source src="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772215223/bf6-GAMEFLIX_o1ttw7.mp4" type="video/mp4">
-    </video>
-   <div class="banner-content">
-  <img src="https://cdn2.steamgriddb.com/logo/4c25257cc0a490730dee6fe6a528accc.png" id="banner-logo" alt="Logo do Jogo">
-  <p id="banner-desc">BF6 ocupa o top 1 da Gameflix como o jogo mais baixado da plataforma!</p>
-  <a href="https://drivee.google.com/uc?export=download&id=1jCvhMNka9U0hJv2NqioXyS3xWGLbI9nQ" download>
-    <button class="btn-play">▶ DOWNLOAD</button>
-  </a>
-  </a>
-  <button class="btn-info">ⓘ Mais informações</button>
-</div>
-  </section>
+  modal.classList.remove("active");
+  document.body.style.overflow = "";
 
-  <div class="row" style="margin-top: 80px;">
-    <h2>JOGOS GRÁTIS GAMEFLIX</h2>
-    <div class="games-scroll">
-      
-      <img class="game-card free-game-trigger" 
-           src="https://i.pinimg.com/736x/56/2e/31/562e311c3db929a33e6919832120b6c7.jpg" 
-           data-title="ELDEN RING" 
-           data-logo="https://www.pngall.com/wp-content/uploads/13/Elden-Ring-Logo-PNG-File.png"
-           data-desc="Elden Ring é um RPG de ação em mundo aberto." 
-           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772073320/ELDEN_yfkx0p.mp4" 
-           data-link="LINK1">
+  // Volta a rodar o vídeo de fundo, mas MUTADO para não atrapalhar a paz
+  if(bannerVideo) {
+    bannerVideo.muted = true;
+    bannerVideo.play().catch(()=>{});
+  }
+}
 
-      <img class="game-card free-game-trigger" 
-           src="https://images.squarespace-cdn.com/content/v1/58bedb0ab3db2bd0463e552b/1488928090199-81WOQR4N03UFM3MBW3OQ/BLOG_FARCRY_1280X788_001A.jpg" 
-           data-title="FarCry Primal" 
-           data-logo="https://upload.wikimedia.org/wikipedia/commons/6/6c/Far_Cry_Primal_Logo.png"
-           data-desc="Ação na Idade da Pedra." 
-           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1771613996/farcry_z2rivm.mp4" 
-           data-link="LINK2">
+/* Fecha o modal clicando fora dele (na parte escura) */
+document.getElementById("netflixModal").addEventListener("click", e => {
+  if(e.target.id === "netflixModal") closeModal();
+});
 
+document.querySelectorAll('.free-game-trigger').forEach(card => {
+  card.addEventListener('click', function() {
+    // 1. Coleta os dados novos
+    const novaLogo = this.getAttribute('data-logo');
+    const novaDesc = this.getAttribute('data-desc');
+    const novoVideo = this.getAttribute('data-video');
+    const novoLink = this.getAttribute('data-link');
+
+    // 2. Atualiza a LOGO e a DESCRIÇÃO
+    const imgLogo = document.getElementById('banner-logo');
+    if (imgLogo) {
+      imgLogo.src = novaLogo;
+    }
+    document.getElementById('banner-desc').textContent = novaDesc;
     
+    // 3. Atualiza o VÍDEO
+    const videoElement = document.getElementById('banner-video');
+    videoElement.src = novoVideo;
+    videoElement.load(); // Força o carregamento do novo vídeo
+    videoElement.play();
 
-      <img class="game-card free-game-trigger" 
-           src="https://upload.wikimedia.org/wikipedia/pt/a/ac/Assassins_Creed_2_capa.png" 
-           data-title="Assassin's Creed II" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/17cefda3639b47a724f51016319b911d.png"
-           data-desc="O clássico de Ezio Auditore." 
-           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772073903/ASSASINE_hevxey.mp4" 
-           data-link="LINK4">
+    // 4. Atualiza o Botão de Download
+    const downloadBtn = document.querySelector('.banner-content a');
+    if (downloadBtn) {
+      downloadBtn.href = novoLink;
+    }
 
-    </div>
-</div>
+    // 5. Sobe para o topo
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+/* --- LÓGICA DE LOGIN --- */
+const loginForm = document.getElementById('login-form');
 
-  <div class="top10-banner">
-    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1771951448/Banner_Horizontal_Black_Friday_Vibrante_Preto_e_Vermelho_2_lhgsn0.png" alt="Banner Top 10">
-  </div>
+loginForm.addEventListener('submit', function(e) {
+  e.preventDefault(); // Impede a página de recarregar
 
-  <div class="row">
-    <h2>VEJA A LISTA DOS TOP 10 JOGOS DA GAMEFLIX</h2>
-    <div class="top-10-container">
-      <button class="arrow-left" onclick="scrollLeft()">‹</button>
-      <div class="top-10-scroll" id="top10">     
-        
-        <div class="card-container" onclick="openModal('Battlefield 6', 'Guerra em escala monumental.', 'ASzOzrB-a9E')">
-          <span class="rank-number">1</span>
-          <img src="https://cdn1.epicgames.com/offer/a14a02aa3c8143729605eaf7c93d7501/EGS_Battlefield6_BattlefieldStudios_S2_1200x1600-a88625a836120c55650c83d17a010c25" class="poster-img" alt="Capa">
-        </div>
+  const emailInput = document.getElementById('user-email').value;
+  const passwordInput = document.getElementById('user-password').value;
 
-        <div class="card-container" onclick="openModal('Resident Evil Requiem', 'lançamento.', 'QkkoHAzjnUs')">
-          <span class="rank-number">2</span>
-          <img src="https://cdn.loaded.com/496x700/media/catalog/product/r/e/resident_evil_requiem_cdkeys_1.png" class="poster-img" alt="Capa">
-        </div>
+  // DEFINA AQUI O EMAIL E SENHA QUE VOCÊ QUER
+  const emailCorreto = "t@gameflix.com";
+  const senhaCorreta = "g";
 
-        <div class="card-container" onclick="openModal('Red Dead Redemption 2', 'A lenda do oeste.', 'eaW0tYpxsp4')">
-          <span class="rank-number">3</span>
-          <img src="https://upload.wikimedia.org/wikipedia/pt/e/e7/Red_Dead_Redemption_2.png" class="poster-img" alt="Capa">
-        </div>
-      
-        <div class="card-container" onclick="openModal('FIFA 26', 'A nova geração do futebol.', 'pBNguPszRSk')">
-          <span class="rank-number">4</span>
-          <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1771886278/Captura_de_tela_2026-02-23_185713_cljm2d.png" class="poster-img" alt="Capa">
-        </div>
-
-         <div class="card-container" onclick="openModal('God of War Ragnarok', 'O fim do mundo nórdico.', 'hfJ4Km46A-0')">
-          <span class="rank-number">5</span>
-          <img src="https://gmedia.playstation.com/is/image/SIEPDC/god-of-war-ragnarok-store-art-01-10sep21$ru?$800px--t$" class="poster-img" alt="Capa">
-        </div>
-
-        <div class="card-container" onclick="openModal('Forza Horizon 6', 'Corridas em mundo aberto.', 'FYH9n37B7Yw')">
-          <span class="rank-number">6</span>
-          <img src="https://azitech.com.br/wp-content/uploads/2024/08/Forza-Horizon-6-lancamento.jpg" class="poster-img" alt="Capa">
-        </div>j
-        <div class="card-container" onclick="openModal('Uncharted: Legacy of Thieves', 'Aventuras de Nathan Drake.', 'mIfOMhRkpe4')">
-          <span class="rank-number">7</span>
-          <img src="https://cdn1.epicgames.com/offer/8b2d6cf2b45b41f1abe91bc5b7c1e8f9/EGS_UNCHARTEDLegacyofThievesCollection_NaughtyDogLLC_S2_1200x1600-9deaa177d8716bde5478cdd75d850c9c" class="poster-img" alt="Capa">
-        </div>
-        <div class="card-container" onclick="openModal('Call of Duty: MW2 Remastered', 'Campanha épica de tiro.', 'E5xszHhM0mw')">
-          <span class="rank-number">8</span>
-          <img src="https://image.api.playstation.com/vulcan/img/rnd/202008/1301/raryqz0xAsk3HutslehRAW4A.png" class="poster-img" alt="Capa">
-        </div>
-        
-        <div class="card-container" onclick="openModal('Spider-Man 2', 'Peter e Miles contra Venom.', 'bgqGdIoa52s')">
-          <span class="rank-number">9</span>
-          <img src="https://cdn1.epicgames.com/offer/b2818b59c0bb420e9647983dfd254931/EGS_MarvelsSpiderManDigitalDeluxeEdition_InsomniacGamesNixxesSoftware_Editions_S2_1200x1600-148e0014e79aa7c2cb23ae2414b11a16" class="poster-img" alt="Capa">
-        </div>
-        <div class="card-container" onclick="openModal('The Last of Us Part II', 'A jornada de Ellie.', 'vhII1qlcZ4E')">
-          <span class="rank-number">10</span>
-          <img src="https://m.media-amazon.com/images/M/MV5BODIwYWZmYWMtYTliNC00YWQ5LTg5ZmEtNTZhNmUxNjdiMzNiXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" class="poster-img" alt="Capa">
-        </div>
-      </div>
-      <button class="arrow-right" onclick="scrollRight()">›</button>
-    </div>
-    <div class="faixa-destaque" style="width: 100%; margin-top: 20px;">
- TODA PLATAFORMA COM 70% DE DESCONTO - ENTRE NO GRUPO PARA FAZER PARTE DA OFERTA DE LANÇAMENTO!
-</div>
-
-    <div class="floating-btn-container">
-      <button class="netflix-btn">ENTRE NO GRUPO DO WHATSAPP AQUI</button>
-    </div>
-
-
-  <div class="row">
-  <h2>Ação e Aventura (Mundo Aberto)</h2>
-  <div class="games-scroll">
-    <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/e/e7/Red_Dead_Redemption_2.png" alt="Red Dead Redemption 2" onclick="openModal('Red Dead Redemption 2', 'A lenda do oeste.', 'eaW0tYpxsp4')">
-   <img class="game-card" src="https://cdn1.epicgames.com/offer/8b2d6cf2b45b41f1abe91bc5b7c1e8f9/EGS_UNCHARTEDLegacyofThievesCollection_NaughtyDogLLC_S2_1200x1600-9deaa177d8716bde5478cdd75d850c9c" alt="Uncharted" onclick="openModal('Uncharted', 'Legado dos Ladrões.', 'mIfOMhRkpe4')">
-     <img class="game-card" src="https://assets-prd.ignimgs.com/2022/05/27/9781506732022-1653620982308.jpg" alt="GTA Vice City" onclick="openModal('GTA Vice City', 'Anos 80 em neon.', 'f6wn1qZ8Sj0')">
-    <img class="game-card" src="https://cdn1.epicgames.com/offer/6e6aa039c73347b885803de65ac5d3db/EGS_GhostofTsushima_SuckerPunchProductions_S2_1200x1600-e23e02c1d70be7b528dba50860f87d39" alt="Ghost of Tsushima" onclick="openModal('Ghost of Tsushima', 'O Fantasma de Tsushima.', 'Zbq7BnsQhrw')">
-    <img class="game-card" src="https://gmedia.playstation.com/is/image/SIEPDC/god-of-war-ragnarok-store-art-01-10sep21$ru?$800px--t$" alt="God of War Ragnarök" onclick="openModal('God of War Ragnarök', 'O fim do mundo nórdico.', 'hfJ4Km46A-0')">
-     <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/9/91/Grand_Theft_Auto_IV_capa.png" alt="Red Dead Redemption" onclick="openModal('gtaGrand Theft Auto IV', 'O início da saga.', '1_jG0m60mX0')">
-    <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/8/80/Grand_Theft_Auto_V_capa.png" alt="GTA V" onclick="openModal('GTA V', 'Domine Los Santos.', 'QkkoHAzjnUs')">
-    <img class="game-card" src="https://static.posters.cz/image/750/116582.jpg" alt="God of War" onclick="openModal('God of War', 'Kratos e Atreus.', 'K0u_kAWLJOA')">
-    <img class="game-card" src="https://image.api.playstation.com/vulcan/ap/rnd/202306/1301/0a5face6e59f61c2ed7f9423c778b10f2e4b8cada54d164f.png" alt="Spider-Man 2" onclick="openModal('Spider-Man 2', 'Peter e Miles contra Venom.', 'bgqGdIoa52s')">
-    <img class="game-card" src="https://image.api.playstation.com/vulcan/ap/rnd/202009/3021/BtsjAgHT9pqHRXtN9FCk7xc8.png" alt="Spider-Man Remastered" onclick="openModal('Spider-Man Remastered', 'O herói de NY.', 'q4GdIoa52s')">
-    <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/7/74/Spider-Man_Miles_Morales_capa.png" alt="Miles Morales" onclick="openModal('Miles Morales', 'O novo Aranha.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/d/d0/Horizon_Zero_Dawn_capa.png" alt="Horizon Forbidden West" onclick="openModal('Horizon Forbidden West', 'O Oeste Proibido.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://assetsio.gnwcdn.com/co2lbb.jpg?width=380&quality=85&format=jpg&auto=webp" alt="Horizon Zero Dawn" onclick="openModal('Grand Theft Auto: Vice City', 'A jornada de Aloy.', 'wzx9GiPqXpY')">
-    <img class="game-card" src="https://img5.dlhas.ir/hosein/files/2021/05/Days-Gone-pc-cover-large.jpg" alt="Days Gone" onclick="openModal('Days Gone', 'Sobreviva à horda.', 'vdWE5qE4xkg')">
-    <img class="game-card" src="https://bdjogos.com.br/capas/5689-mad-max-capa-1.jpg" alt="Mad Max" onclick="openModal('Mad Max', 'Guerreiro da estrada.', 'eaW0tYpxsp4')">
-    <img class="game-card" src="https://cdn1.epicgames.com/offer/angelonia/WDA_StorePortrait_1200x1600_1200x1600-75d21fb44d647ad69967ae1bb0ab0cbc" alt="Watch Dogs 2" onclick="openModal('Watch Dogs 2', 'Hackeie o sistema.', 'hh9x4XpoENw')">
-   <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/d/d3/Grand_Theft_Auto_San_Andreas_capa.png" alt="GTA IV" onclick="openModal('GTA IV', 'Niko Bellic em Liberty City.', 'M80K51DosFo')">
-   <img class="game-card" src="https://www.europanet.com.br/upload/id_produto/60_____/6000201g.jpg" alt="Hogwarts Legacy" onclick="openModal('Hogwarts Legacy', 'Mundo bruxo.', 'BtyBjwm9_V0')">
-  </div>
-</div>
-
-<div class="row">
-  <h2>Franquia Call of Duty</h2>
-  <div class="games-scroll">
-    <img class="game-card" src="https://bdjogos.com.br/capas/24175-call-of-duty-black-ops-6-capa-1.webp" alt="Call of Duty HQ" onclick="openModal('CoD HQ', 'Acesse seu arsenal.', 'Q_j8BqGqfF0')">
-    <img class="game-card" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjG5gD2EPSegoWpyI0LAvVz1rzUV-MKZRmdDJXWuuCZLweBOAyrkpYNlxQ7FGomhRI6-IUA-IpPTxQh2iaYQNJceG03XR8puhMXRIfAluevOg9swrtBDItBQ_E1wPHcrxPz2Eovkktf03LupJPzy9_T6xJtIt79Xhz7LisCBS5aWtlbwiWYmurF1ckSJF2i/s16000/portalfps-call-of-duty-modern-warfare-iii-wallpaper.jpg" alt="MW III" onclick="openModal('Modern Warfare III', 'A guerra mudou.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://m.media-amazon.com/images/I/81mUtFXhFCL.jpg" alt="MW II" onclick="openModal('Modern Warfare II', 'Operação secreta.', 'r72GPZ6b6Ec')">
-    <img class="game-card" src="https://m.media-amazon.com/images/M/MV5BNzczN2VmMzEtNTk4NS00OTk0LTg4MWYtZWVkYzQ0MzE2NmQ4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="MW 2019" onclick="openModal('Modern Warfare 2019', 'Realismo visceral.', 'bH1lHCirC4Q')">
-    <img class="game-card" src="https://bdjogos.com.br/capas/7290-call-of-duty-black-ops-iii-capa-1.jpg" alt="Black Ops III" onclick="openModal('Black Ops III', 'Futuro sombrio.', 'v4_T_S80mX0')">
-    <img class="game-card" src="https://m.media-amazon.com/images/I/81FK5l2lXjL._AC_UF1000,1000_QL80_.jpg" alt="Black Ops II" onclick="openModal('Black Ops II', 'Guerra fria moderna.', 'x3tedlRE7nU')">
-    <img class="game-card" src="https://cdn.loaded.com/496x700/media/catalog/product/c/a/call-of-duty-vanguard-xbox-one-xbox-one-game-microsoft-store-cover_1__3.jpg" alt="call off duty vanguard" onclick="openModal('Black Ops', 'Operação clandestina.', 'OtRnpC7XzXM')">
-    <img class="game-card" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjShfiHr6QsUdVkqkBfeIaVf0uWzcs6cX4zYwFJMNrs8KwxLb63dP0d_w3VoF8jd0cASElB8Xkqun8zpGNyDzE4gE3M-Dcg0_c3HD070hlwAvMhmx9WHGoAs47c-C0l4PAyQlZ1m9tUeid-/s1600/CALL-OF-DUTY-WWII-1080P-Wallpaper-1.jpg" alt="CoD WWII" onclick="openModal('CoD WWII', 'Segunda Guerra.', 'O-vHq2xXpXM')">
-    <img class="game-card" src="https://cdn.europosters.eu/image/1300/15042.jpg" alt="Ghosts" onclick="openModal('Ghosts', 'Lute nas sombras.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://store-images.s-microsoft.com/image/apps.703.13739535057760905.34778648-088c-45a3-9d45-1117ca041901.c4d90513-3be4-4a22-9cd6-85a7ffa8df7f" alt="World at War" onclick="openModal('World at War', 'Combate brutal.', 'Lq594XpoENw')">
-  </div>
-</div>
-
-<div class="row">
-  <h2>Franquia Assassin's Creed</h2>
-  <div class="games-scroll">
-    <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/e/e9/Assassins_Creed_Valhalla_capa.png" alt="AC Valhalla" onclick="openModal('AC Valhalla', 'A saga viking.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://store-images.s-microsoft.com/image/apps.62015.13663198691635509.d632fab1-4bb2-4655-a619-75bb8f17a360.e00e5e77-8e14-490f-a51b-a024d0fe6e11" alt="AC III" onclick="openModal('AC III', 'Revolução Americana.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/8/84/Assassins_Creed_Odyssey_capa.png" alt="AC Odyssey" onclick="openModal('AC Odyssey', 'Grécia Antiga.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://cdn1.epicgames.com/offer/camellia/ACOrigins_STD_Store_Portrait_1200x1600_1200x1600-4a79f9f393f7a3a9e5be3a0ae581f3d5" alt="AC Origins" onclick="openModal('AC Origins', 'Origem da irmandade.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/9/9a/Assassins_Creed_Unity_capa.png" alt="AC Unity" onclick="openModal('AC Unity', 'Revolução Francesa.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/c/ca/Assassins_Creed_4_Black_Flag_capa.png" alt="AC Black Flag" onclick="openModal('AC IV Black Flag', 'Era de ouro dos piratas.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/a/ac/Assassins_Creed_2_capa.png" alt="AC II" onclick="openModal('AC II', 'A jornada de Ezio.', 'Lq594XpoENw')">
-  </div>
-</div>
-
-<div class="row">
-  <h2>Terror e Sobrevivência</h2>
-  <div class="games-scroll">
-    <img class="game-card" src="https://tm.ibxk.com.br/2021/05/05/05040759331000.jpg" alt="RE Village" onclick="openModal('RE Village', 'O terror nas montanhas.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://sm.ign.com/ign_br/cover/r/resident-e/resident-evil-7-biohazard_ubst.jpg" alt="RE 7" onclick="openModal('RE 7 Biohazard', 'O pântano maldito.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://cdn.mobygames.com/covers/2299574-resident-evil-6-xbox-one-front-cover.jpg" alt="RE 6" onclick="openModal('RE 6', 'Terror global.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/0cd47e73-13d0-4574-99e7-6989ec6ac3fc/dg675d8-f9cebeeb-76b9-4bf3-9ffc-5e05db5c9db6.png/v1/fill/w_1280,h_1815,q_80,strp/resident_evil_5__2009____poster_by_thepatchedvest_dg675d8-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTgxNSIsInBhdGgiOiIvZi8wY2Q0N2U3My0xM2QwLTQ1NzQtOTllNy02OTg5ZWM2YWMzZmMvZGc2NzVkOC1mOWNlYmVlYi03NmI5LTRiZjMtOWZmYy01ZTA1ZGI1YzlkYjYucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.b9g4fE6oFpxVsRwVFhJ66M3Oe5vQsVH78W2jzQjtqBU" alt="RE 5" onclick="openModal('RE 5', 'Ameaça na África.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://img.elo7.com.br/product/main/494956D/quadro-decorativo-games-resident-evil-4-remake-games.jpg" alt="RE 4" onclick="openModal('RE 4', 'Remake lendário.', 'j5Xv2lM9ses')">
-    <img class="game-card" src="https://howlongtobeat.com/games/72822_Resident_Evil_3_(2020).jpg" alt="RE 3" onclick="openModal('RE 3 Remake', 'Fuja de Nemesis.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://m.media-amazon.com/images/I/71D76nsyDOL._AC_UF1000,1000_QL80_.jpg" alt="RE 2" onclick="openModal('RE 2 Remake', 'Raccoon City.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://store-images.s-microsoft.com/image/apps.23097.69886306496288395.9ec42146-6037-4440-b5c7-3a44e5213cc3.0e09163e-a6c4-40f6-9fe1-24a6b4685c64" alt="DayZ" onclick="openModal('DayZ', 'Mundo infestado.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://image.api.playstation.com/vulcan/ap/rnd/202208/1118/eqqPM2rRA1KnVNQuNkh4BhFn.png" alt="Ilha Morta 2" onclick="openModal('Dead Island 2', 'Zumbis em LA.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://cdn1.epicgames.com/offer/87b7846d2eba4bc49eead0854323aba8/EGS_DyingLight2StayHumanReloadedEdition_Techland_S2_1200x1600-76cef594ff94fbac64a8af1ebe4c7590" alt="Dying Light 2" onclick="openModal('Dying Light 2', 'Parkour e zumbis.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://cdn1.epicgames.com/offer/0c40923dd1174a768f732a3b013dcff2/EGS_TheLastofUsPartIDigitalDeluxeEdition_NaughtyDogLLC_Editions_S2_1200x1600-6db4887c7913c5a43ae3a086de2ad29c" alt="TLoU I" onclick="openModal('The Last of Us Part I', 'A jornada de Joel.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://cdn1.epicgames.com/offer/7713e3fa4b234e0d8f553044205d53b6/EGS_TheLastofUsPartIIRemastered_NaughtyDogLLCNixxesSoftwareIronGalaxy_S2_1200x1600-2e13755a6b3fec2ee9dbcc231a1cf39c" alt="TLoU II" onclick="openModal('The Last of Us Part II', 'Vingança de Ellie.', 'vhII1qlcZ4E')">
-     <img class="game-card" src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2835530/54a47a9c7f91ae79f5c131d75df9d0e2feb9133e/capsule_616x353.jpg?t=1771657999" alt="Backrooms Extractions" onclick="openModal('Backrooms', 'Escape do vazio.', 'Lq594XpoENw')">
-     </div>
-</div>
-
-<div class="row">
-  <h2>Soulslike e RPG de Ação</h2>
-  <div class="games-scroll">
-    <img class="game-card" src="https://assets.xboxservices.com/assets/7b/54/7b54f5e4-0857-4ce3-8a18-2b8c431e8a9e.jpg" alt="Elden Ring" onclick="openModal('Elden Ring', 'Torne-se o Lorde.', 'AKXiKBnzpMs')">
-    <img class="game-card" src="https://hobbygames.ru/image/enaza/19184698/box2.jpg.jpg" alt="Wukong" onclick="openModal('Black Myth: Wukong', 'Lenda chinesa.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://img.elo7.com.br/product/zoom/4C5B3FA/quadro-decorativo-game-lies-of-p-rpg-com-moldura-a3-lies-of-p.jpg" alt="Lies of P" onclick="openModal('Lies of P', 'Pinóquio sombrio.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://image.api.playstation.com/cdn/HP0700/CUSA03434_00/9Lvijwqww6gvFTsciIzMWqs61DlOg8xIAsomficGKF6g7z6bYgrYGAoG80gr87pw.png" alt="DS III" onclick="openModal('Dark Souls III', 'O fim do fogo.', '_zDZYrIUgKE')">
-    <img class="game-card" src="https://m.media-amazon.com/images/M/MV5BMTM4N2JjZTEtNzE2YS00MTdmLTg1NTctZjVkNGFlOWU5OWFmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="DS II Scholar" onclick="openModal('Dark Souls II: Scholar', 'A maldição persiste.', 'Lq594XpoENw')">
-     <img class="game-card" src="https://sm.ign.com/ign_pt/gallery/d/dark-souls/dark-souls-remastered-box-art_pr4m.jpg" alt="DS Remastered" onclick="openModal('Dark Souls Remastered', 'Prepare-se para morrer.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://bdjogos.com.br/capas/6265-the-witcher-3-wild-hunt-capa-1.jpg" alt="Witcher 3" onclick="openModal('The Witcher 3', 'A caçada de Geralt.', 'c0i88t0Kacs')">
-    <img class="game-card" src="https://www.productsleutels.nl/wp-content/uploads/2021/01/Cyberpunk-2077-PC-COVER.jpg" alt="Cyberpunk" onclick="openModal('Cyberpunk 2077', 'Night City.', '8X2kIfS6fb8')">
-    <img class="game-card" src="https://cdn1.epicgames.com/offer/c8738a4d1ead40368eab9688b3c7d737/EGS_SkyrimSpecialEdition_BethesdaGameStudios_S2_1200x1600-ae5d13f6510e81460fe80aa1ca19cf4c" alt="Skyrim SE" onclick="openModal('Skyrim Special Edition', 'Dovahkiin.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://images3.alphacoders.com/117/thumb-1920-117095.jpg" alt="Skyrim" onclick="openModal('Skyrim', 'O épico da Bethesda.', 'Lq594XpoENw')">
-  </div>
-</div>
-
-<div class="row">
-  <h2>Corrida e Esportes</h2>
-  <div class="games-scroll">
-   <img class="game-card" src="https://image.api.playstation.com/vulcan/ap/rnd/202109/1321/3mjMyRiJaq8lw1EFWiTCUJRV.png" alt="FIFA 23" onclick="openModal('FIFA 23', 'O jogo de todos.', 'pBNguPszRSk')">
-    <img class="game-card" src="https://azitech.com.br/wp-content/uploads/2024/08/Forza-Horizon-6-lancamento.jpg" alt="FH 5" onclick="openModal('Forza Horizon 5', 'Festival no México.', 'FYH9n37B7Yw')">
-    <img class="game-card" src="https://static.wikia.nocookie.net/forzamotorsport/images/0/09/FH4_Boxart.jpg/revision/latest/scale-to-width-down/1200?cb=20180610225715" alt="FH 4" onclick="openModal('Forza Horizon 4', 'Corridas na Grã-Bretanha.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://m.media-amazon.com/images/M/MV5BNDk2NmRkOTQtYWM5Zi00MTBjLWEwZjktM2FmY2U5YWNkZGM0XkEyXkFqcGc@._V1_.jpg" alt="Motorsport" onclick="openModal('Forza Motorsport', 'Simulação real.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://cdnb.artstation.com/p/assets/images/images/019/956/143/large/mighoet-sundback-nfs-heat-cover.jpg?1565732891" alt="NFS Heat" onclick="openModal('NFS Heat', 'Lute contra a lei.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://images.steamusercontent.com/ugc/5109928331639408171/D260688DBD1EBFEF65BABF0D2E6956D8391E72B3/" alt="NFS Payback" onclick="openModal('NFS Payback', 'Vingança em alta velocidade.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://media.vandal.net/m/16160/need-for-speed-most-wanted-20162383311_1.jpg" alt="NFS Most Wanted" onclick="openModal('NFS Most Wanted', 'O mais procurado.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://m.media-amazon.com/images/M/MV5BNmFkNzc3MDMtYzY4MC00NTI5LWI2M2QtYjZiM2M1MWE4NjJlXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="NFS 2015" onclick="openModal('Need for Speed 2015', 'Cultura urbana.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://cdn1.epicgames.com/offer/82aa77fde0b14916a86b66b1e6345c30/EGS_RIDE5_MilestoneSrl_S2_1200x1600-abc515266abe022f93ee7517ca8ec7fa" alt="Ride 5" onclick="openModal('Ride 5', 'Velocidade em duas rodas.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://e.snmc.io/lk/f/x/2f5dbf23974d6391c11c7b5b2fce6bb0/9667231" alt="Assetto Corsa" onclick="openModal('Assetto Corsa', 'Realismo nas pistas.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://sm.ign.com/ign_br/cover/f/farming-si/farming-simulator-25_p1nu.jpg" alt="FIFA 23" onclick="openModal('FIFA 23', 'O jogo de todos.', 'pBNguPszRSk')">
-     <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/d/dc/Capa_de_Forza_Horizon_5.jpg" alt="Farming Simulator 25" onclick="openModal('Farming 25', 'Vida no campo.', 'Lq594XpoENw')">
-  </div>
-</div>
-
-<div class="row">
-  <h2>Luta</h2>
-  <div class="games-scroll">
-    <img class="game-card" src="https://m.media-amazon.com/images/I/71kj4+Y5bHL._AC_UF1000,1000_QL80_.jpg" alt="MK 1" onclick="openModal('Mortal Kombat 1', 'Novo universo.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://pixelstore.cl/cdn/shop/files/Disenosintitulo_25.png" alt="MK 11" onclick="openModal('Mortal Kombat 11', 'Fatalities épicos.', '7zwQPJEyKbc')">
-    <img class="game-card" src="https://images.gog.com/3272c0976e5651c0629daf5eab1ac4b2c49d7154b0a316886a1c7fa8b26af702_glx_vertical_cover.webp?namespace=gamesdb" alt="MK X" onclick="openModal('Mortal Kombat X', 'A próxima geração.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://cdn.europosters.eu/image/1300/230759.jpg" alt="Tekken 8" onclick="openModal('Tekken 8', 'Destino das famílias.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://image.api.playstation.com/cdn/UP0700/CUSA05972_00/4yfeeKKfJdD5WzDQsoiM3xrcqPlpDLm7.png" alt="Tekken 7" onclick="openModal('Tekken 7', 'Batalhas intensas.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/0/03/Sfv-logo.png" alt="SF V" onclick="openModal('Street Fighter V', 'Lute pelo mundo.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://static.wikia.nocookie.net/dublagempedia/images/8/85/Packshot-4f17aa8af0f3631bd8367b226c0fd263.jpg/revision/latest?cb=20191024001337&path-prefix=pt-br" alt="Injustice 2" onclick="openModal('Injustice 2', 'Heróis vs Vilões.', 'Lq594XpoENw')">
-    <img class="game-card" src="http://cdn.awsli.com.br/2500x2500/22/22652/produto/295227042/dragon-ball-z-kakarot-legendary-edition-cover-vxuco0ery4.png" alt="Injustice 2" onclick="openModal('Injustice 2', 'Heróis vs Vilões.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://meups.com.br/wp-content/uploads/2023/09/Israel-Mobolaji-Temitayo-Odunayo-Oluwafemi-Owolabi-Adesanya-UFC.jpeg" alt="Injustice 2" onclick="openModal('Injustice 2', 'Heróis vs Vilões.', 'Lq594XpoENw')">
-  </div>
-</div>
-
-<div class="row">
-  <h2>Outros Títulos (FPS, LEGO, Stealth, etc.)</h2>
-  <div class="games-scroll">
-    <img class="game-card" src="https://meups.com.br/wp-content/uploads/2025/10/Battlefield-6-REVIEW-PS5-scaled.jpg" alt="BF V" onclick="openModal('Battlefield V', 'Segunda Guerra.', 'ASzOzrB-a9E')">
-    <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/8/84/Battlefield_4_capa.png" alt="BF 4" onclick="openModal('Battlefield 4', 'Combate moderno.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/1/1e/Hitman_2016_capa.png" alt="Hitman" onclick="openModal('Hitman: World of Assassination', 'Agente 47.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://cdn.europosters.eu/image/750/26603.jpg" alt="MGS V" onclick="openModal('MGS V: The Phantom Pain', 'Tactical Stealth.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://img.elo7.com.br/product/685x685/3A5833F/poster-adesivo-decorativo-batman-arkham-knight-a-42-5x60cm-enfeite.jpg" alt="Batman Knight" onclick="openModal('Batman Arkham Knight', 'Seja o Morcego.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://img.elo7.com.br/product/zoom/3A58354/poster-adesivo-decorativo-batman-arkham-origins-b-42-5x60cm-adesivo.jpg" alt="Batman Origins" onclick="openModal('Batman Arkham Origins', 'O início da lenda.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://cdn1.epicgames.com/offer/hyacinth/GRW_StorePortrait_1200x1600_1200x1600-78b13dd96e208170ca3ed32b3034fcc2" alt="Ghost Recon" onclick="openModal('Ghost Recon Wildlands', 'Operação Cartel.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://image.api.playstation.com/cdn/UP4363/CUSA04220_00/enPJKepv77SjDxBYHsetY8XwebH26W1Z.png" alt="Sniper Elite 4" onclick="openModal('Sniper Elite 4', 'Atirador de elite.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://wallpapers.com/images/hd/left-4-dead-2-zombie-hand-t5rhv5o4w42ii7pg.jpg" alt="L4D2" onclick="openModal('Left 4 Dead 2', 'Zumbis cooperativo.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000089518/cc83ebef3be669c8fcc66f9c53e3c6e6dabf5cbc44947c9e1c7e5febeb254ee6" alt="Bodycam" onclick="openModal('Bodycam', 'Fotorrealismo.', 'v4Z9-G-tB54')">
-    <img class="game-card" src="https://images.ctfassets.net/wn7ipiv9ue5v/4yb8h87qRjvnQRno2GHAeE/522e872bc1d5fcf56e84bdce0821c610/BULLY_SE_FOB_1212x1497_LOGO_V01.jpg" alt="Bully" onclick="openModal('Bully: Scholarship Edition', 'Vida escolar.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://universocroft.com.br/wp-content/uploads/2023/06/tr_2013_packshot-725x1024-1.jpg" alt="Tomb Raider" onclick="openModal('Tomb Raider', 'A sobrevivência de Lara.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://image.api.playstation.com/cdn/UP1018/CUSA00251_00/7YrRqN2wgRzpzX4K5RLUEecDyu53mz8U.png" alt="LEGO Marvel" onclick="openModal('LEGO Marvel Super Heroes', 'Heróis de bloco.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/3/39/Sonic_Mania_capa.png" alt="Sonic Mania" onclick="openModal('Sonic Mania', 'O ouriço clássico.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000002090/ecfc64f339579b17ed8d12d5bdb4acd0cad2811cb2ff7dd0a02ce7e512c2d26a" alt="Crash Trilogy" onclick="openModal('Crash Bandicoot Trilogy', 'Bandicoot está de volta.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://img.elo7.com.br/product/685x685/2797F06/capa-pirulito-plants-vs-zombies-capa-para-pirulito.jpg" alt="PvZ" onclick="openModal('Plants vs Zombies', 'Defenda seu jardim.', 'Lq594XpoENw')">
-    <img class="game-card" src="https://images.g2a.com/360x600/1x1x1/the-sims-2-legacy-collection-p10000509694/f0cedf020a3f4f29af84c3cb" alt="The Sims 2" onclick="openModal('The Sims 2: Legacy', 'Vida simulada.', 'Lq594XpoENw')">
-  </div>
-</div>
-
-<div class="faixa-destaque" style="width: 100%; margin-top: 20px;">
-  TODA PLATAFORMA COM 70% DE DESCONTO ENTRE NO GRUPO PARA FAZER PARTE DA OFERTA DE LANÇAMENTO!
-</div>
-
-<div class="floating-btn-container">
-  <button class="netflix-btn">ENTRE NO GRUPO DO WHATSAPP AQUI
-</div>
-  </div>
-
-  <div class="netflix-modal" id="netflixModal">
-    <div class="modal-content">
-      <span class="modal-close" onclick="closeModal()">×</span>
-      <iframe id="modalVideo" class="modal-video" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-      <div class="modal-info">
-        <h2 id="modalTitle"></h2>
-        <p id="modalDesc"></p>
-      </div>
-    </div>
-  </div>
-
-  <footer class="footer">
-  <div class="footer-container">
-    <p class="footer-contact">Dúvidas? Ligue <a href="https://wa.me/5500000000000">0800-GAMEFLIX</a></p>
+  if (emailInput === emailCorreto && passwordInput === senhaCorreta) {
+    // Esconde a tela de login
+    document.getElementById('login-screen').classList.add('hidden');
     
-    <div class="footer-links">
-      <ul class="footer-column">
-        <li><a href="#">Perguntas frequentes</a></li>
-        <li><a href="#">Relações com investidores</a></li>
-        <li><a href="#">Formas de assistir</a></li>
-        <li><a href="#">Informações corporativas</a></li>
-      </ul>
-
-      <ul class="footer-column">
-        <li><a href="#">Central de ajuda</a></li>
-        <li><a href="#">Carreiras</a></li>
-        <li><a href="#">Termos de uso</a></li>
-        <li><a href="https://instagram.com/Ian_Ferreira_MKT">Entre em contato</a></li>
-      </ul>
-
-      <ul class="footer-column">
-        <li><a href="#">Conta</a></li>
-        <li><a href="#">Resgatar cartões pré-pagos</a></li>
-        <li><a href="#">Privacidade</a></li>
-        <li><a href="#">Teste de velocidade</a></li>
-      </ul>
-
-      <ul class="footer-column">
-        <li><a href="#">Media Center</a></li>
-        <li><a href="#">Comprar cartões pré-pagos</a></li>
-        <li><a href="#">Preferências de cookies</a></li>
-        <li><a href="#">Avisos legais</a></li>
-      </ul>
-    </div>
-
-    <p class="footer-country">GAMEFLIX Brasil</p>
-  </div>
-</footer>
-  <script src="script.js"></script>
-  <script>
-    const searchInput = document.getElementById('game-search');
-    searchInput.addEventListener('input', function() {
-      const termoBusca = this.value.toLowerCase().trim();
-      const cardsPremium = document.querySelectorAll('.row-premium .game-card');
-      cardsPremium.forEach(card => {
-        const nomeJogo = card.getAttribute('alt') ? card.getAttribute('alt').toLowerCase() : "";
-        if (nomeJogo.includes(termoBusca)) {
-          card.style.display = "";
-        } else {
-          card.style.display = "none";
-        }
-      });
-    });
-  </script>
-
-</body>
-</html>
-
-
-
-
+    // Opcional: Inicia o vídeo do banner após entrar
+    const bannerVideo = document.getElementById("banner-video");
+    if(bannerVideo) bannerVideo.play().catch(()=>{});
+    
+    alert("Bem-vindo a melhor plataforma de games do Brasail!");
+  } else {
+    alert("Email ou senha incorretos. Tente novamente.");
+  }
+});
 
