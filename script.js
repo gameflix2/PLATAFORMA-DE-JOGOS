@@ -137,8 +137,8 @@ loginForm.addEventListener('submit', function(e) {
   const passwordInput = document.getElementById('user-password').value;
 
   // DEFINA AQUI O EMAIL E SENHA QUE VOCÊ QUER
-  const emailCorreto = "t@gameflix.com";
-  const senhaCorreta = "g";
+  const emailCorreto = "testegratis@gameflix.com";
+  const senhaCorreta = "testegratisgameflix";
 
   if (emailInput === emailCorreto && passwordInput === senhaCorreta) {
     // Esconde a tela de login
@@ -148,9 +148,10 @@ loginForm.addEventListener('submit', function(e) {
     const bannerVideo = document.getElementById("banner-video");
     if(bannerVideo) bannerVideo.play().catch(()=>{});
     
-    alert("Bem-vindo a melhor plataforma de games do Brasail!");
+    alert("Bem-vindo a melhor plataforma de games do Brasil!");
   } else {
     alert("Email ou senha incorretos. Tente novamente.");
   }
 });
+
 
